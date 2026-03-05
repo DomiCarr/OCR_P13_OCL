@@ -1,10 +1,8 @@
+"""
+Project-level admin module.
+
+Model registrations are now handled inside each application
+(lettings and profiles).
+"""
+
 from django.contrib import admin
-
-from .models import Letting
-from .models import Address
-from .models import Profile
-
-
-admin.site.register(Letting)
-admin.site.register(Address)
-admin.site.register(Profile)
