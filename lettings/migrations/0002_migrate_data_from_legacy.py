@@ -1,16 +1,11 @@
 # lettings/migrations/0002_migrate_data_from_legacy.py
-
-"""
-Data migration to move legacy lettings data into the new lettings app.
-"""
+"""Data migration to move legacy lettings data into the new lettings app."""
 
 from django.db import migrations
 
 
 def forwards(apps, schema_editor):
-    """
-    Copy legacy Address and Letting records into the new app tables.
-    """
+    """Copy legacy Address and Letting records into the new app tables."""
     legacy_address = apps.get_model("oc_lettings_site", "Address")
     legacy_letting = apps.get_model("oc_lettings_site", "Letting")
 
@@ -38,14 +33,13 @@ def forwards(apps, schema_editor):
 
 
 def backwards(apps, schema_editor):
-    """
-    Reverse the data migration by clearing new app tables.
-    """
+    """Reverse the data migration by clearing new app tables."""
     apps.get_model("lettings", "Letting").objects.all().delete()
     apps.get_model("lettings", "Address").objects.all().delete()
 
 
 class Migration(migrations.Migration):
+    """Data migration."""
 
     dependencies = [
         ("lettings", "0001_initial"),

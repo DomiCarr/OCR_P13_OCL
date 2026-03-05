@@ -1,16 +1,11 @@
 # profiles/migrations/0002_migrate_data_from_legacy.py
-
-"""
-Data migration to move legacy profiles data into the new profiles app.
-"""
+"""Data migration from legacy profiles to the new profiles app tables."""
 
 from django.db import migrations
 
 
 def forwards(apps, schema_editor):
-    """
-    Copy legacy Profile records into the new app table.
-    """
+    """Copy legacy Profile records into the new app table."""
     legacy_profile = apps.get_model("oc_lettings_site", "Profile")
     new_profile = apps.get_model("profiles", "Profile")
 
@@ -22,13 +17,12 @@ def forwards(apps, schema_editor):
 
 
 def backwards(apps, schema_editor):
-    """
-    Reverse the data migration by clearing the new app table.
-    """
+    """Reverse the data migration by clearing the new app table."""
     apps.get_model("profiles", "Profile").objects.all().delete()
 
 
 class Migration(migrations.Migration):
+    """Data migration."""
 
     dependencies = [
         ("profiles", "0001_initial"),

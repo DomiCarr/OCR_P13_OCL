@@ -10,9 +10,7 @@ from django.db import models
 
 
 class Address(models.Model):
-    """
-    Represents a physical address associated with a letting.
-    """
+    """Represents a physical address associated with a letting."""
 
     number = models.PositiveIntegerField()
     street = models.CharField(max_length=64)
@@ -22,22 +20,26 @@ class Address(models.Model):
     country_iso_code = models.CharField(max_length=3)
 
     def __str__(self):
-        """
-        Return a readable representation of the address.
-        """
+        """Return a readable representation of the address."""
         return f"{self.number} {self.street}"
+
+    class Meta:
+        """Model metadata."""
+
+        verbose_name_plural = "Addresses"
 
 
 class Letting(models.Model):
-    """
-    Represents a rental property.
-    """
+    """Represents a rental property."""
 
     title = models.CharField(max_length=256)
     address = models.OneToOneField(Address, on_delete=models.CASCADE)
 
     def __str__(self):
-        """
-        Return the title of the letting.
-        """
+        """Return the title of the letting."""
         return self.title
+
+    class Meta:
+        """Model metadata."""
+
+        verbose_name_plural = "Lettings"

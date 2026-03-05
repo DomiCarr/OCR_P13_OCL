@@ -1,5 +1,9 @@
 # oc_lettings_site/migrations/0002_drop_legacy_models.py
 
+"""Migration to remove legacy models from oc_lettings_site."""
+
+# oc_lettings_site/migrations/0002_drop_legacy_models.py
+
 """
 Schema migration to drop legacy tables after data has been migrated.
 """
@@ -8,6 +12,7 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
+    """Database schema migration."""
 
     dependencies = [
         ("lettings", "0002_migrate_data_from_legacy"),

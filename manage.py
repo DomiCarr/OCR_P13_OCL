@@ -1,3 +1,11 @@
+# manage.py
+"""
+Django's command-line utility for administrative tasks.
+
+This entry point sets the default settings module and delegates commands
+to Django's management framework.
+"""
+
 import os
 import sys
 
