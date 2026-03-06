@@ -1,0 +1,11 @@
+[run]
+omit =
+    */tests/*
+    */test_*.py
+    */migrations/*
+    */asgi.py
+    */wsgi.py
+
+[report]
+show_missing = True
+skip_covered = False
