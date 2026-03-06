@@ -1,12 +1,14 @@
 # oc_lettings_site/settings.py
 """Django settings for the OCL project."""
 
+import logging
 import os
 from pathlib import Path
 
 import sentry_sdk
-from sentry_sdk.integrations.django import DjangoIntegration
 from dotenv import load_dotenv
+from sentry_sdk.integrations.django import DjangoIntegration
+from sentry_sdk.integrations.logging import LoggingIntegration
 
 load_dotenv()
 
@@ -16,9 +18,17 @@ load_dotenv()
 
 SENTRY_DSN = os.environ.get("SENTRY_DSN")
 
+sentry_logging = LoggingIntegration(
+    level=logging.INFO,
+    event_level=logging.ERROR,
+)
+
 sentry_sdk.init(
     dsn=SENTRY_DSN,
-    integrations=[DjangoIntegration()],
+    integrations=[
+        DjangoIntegration(),
+        sentry_logging,
+    ],
     traces_sample_rate=1.0,
     send_default_pii=True,
 )
