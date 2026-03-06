@@ -135,36 +135,57 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 # ---------------------------------------------------------
 # Logging configuration
 # ---------------------------------------------------------
-# Configure Django logging for development and monitoring.
-# Logs are sent to the console so they can be observed during
-# local execution and captured by monitoring tools such as Sentry.
+# Configure application logging.
+# Logs are written to the console for local debugging and
+# captured by Sentry through the LoggingIntegration.
 #
 # Log levels:
 # INFO     - normal application activity
 # WARNING  - unexpected but non-critical situations
-# ERROR    - application errors
+# ERROR    - application errors (sent to Sentry)
 # CRITICAL - serious failures
 #
-# Logs are displayed in the terminal when running the Django server.
+# Application loggers are defined per module to control
+# verbosity and keep Django internal logs at WARNING level.
 
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
+
     "formatters": {
         "simple": {
             "format": "[{levelname}] {asctime} {name} : {message}",
             "style": "{",
         },
     },
+
     "handlers": {
         "console": {
             "class": "logging.StreamHandler",
             "formatter": "simple",
         },
     },
+
+    "loggers": {
+        "oc_lettings_site": {
+            "handlers": ["console"],
+            "level": "INFO",
+            "propagate": False,
+        },
+        "lettings": {
+            "handlers": ["console"],
+            "level": "INFO",
+            "propagate": False,
+        },
+        "profiles": {
+            "handlers": ["console"],
+            "level": "INFO",
+            "propagate": False,
+        },
+    },
+
     "root": {
         "handlers": ["console"],
-        "level": "INFO",
-        "propagate": True,
+        "level": "WARNING",
     },
 }

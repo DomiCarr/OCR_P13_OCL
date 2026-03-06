@@ -36,4 +36,12 @@ def index(request):
         user,
     )
 
+    logger.error(
+        "Sentry log test | ip=%s | path=%s | method=%s | user=%s",
+        client_ip,
+        path,
+        method,
+        user,
+    )
+
     return render(request, "index.html")
