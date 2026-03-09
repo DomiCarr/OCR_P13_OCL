@@ -39,7 +39,7 @@ sentry_sdk.init(
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.getenv("SECRET_KEY")
+SECRET_KEY = os.getenv("SECRET_KEY", "ci-test-secret-key")
 
 DEBUG = os.getenv("DEBUG", "False") == "True"
 
