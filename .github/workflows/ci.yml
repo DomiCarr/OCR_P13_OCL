@@ -1,38 +1,68 @@
+# Workflow name displayed in the GitHub Actions tab
 name: CI
 
+# Events that trigger the CI pipeline
 on:
+  # Run CI on every push to the main branch
   push:
     branches: [ main ]
+
+  # Run CI when a Pull Request targets main
   pull_request:
     branches: [ main ]
 
+# Jobs executed by the pipeline
 jobs:
   tests:
 
+    # Virtual machine used by GitHub Actions
     runs-on: ubuntu-latest
 
     steps:
+
+    # Step 1: checkout the repository code
     - name: Checkout repository
       uses: actions/checkout@v4
 
+    # Step 2: install the required Python version
     - name: Setup Python
       uses: actions/setup-python@v5
       with:
         python-version: "3.13"
 
+    # Step 3: install project dependencies
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
+    # Step 4: run code linting (PEP8 compliance)
     - name: Run flake8
       run: flake8 oc_lettings_site lettings profiles
 
+    # Step 5: check docstrings style and presence
     - name: Run pydocstyle
       run: pydocstyle oc_lettings_site lettings profiles
 
+    # Step 6: run unit and integration tests
     - name: Run tests
       run: pytest
 
+    # Step 7: generate test coverage report
     - name: Run coverage
       run: pytest --cov=oc_lettings_site --cov=lettings --cov=profiles
+
+    # Step 8: login to Docker Hub using GitHub secret
+    - name: Login to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_TOKEN }}
+
+    # Step 9: build the Docker image
+    - name: Build Docker image
+      run: docker build -t thedoms/oc-lettings:latest .
+
+    # Step 10: push the Docker image to Docker Hub
+    - name: Push Docker image
+      run: docker push thedoms/oc-lettings:latest
