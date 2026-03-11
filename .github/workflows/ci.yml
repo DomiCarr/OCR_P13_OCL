@@ -53,17 +53,48 @@ jobs:
     - name: Run coverage
       run: pytest --cov=oc_lettings_site --cov=lettings --cov=profiles
 
-    # Step 8: login to Docker Hub using GitHub secret
+    # Step 8: login to Docker Hub using GitHub secrets
     - name: Login to Docker Hub
       uses: docker/login-action@v3
       with:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_TOKEN }}
 
-    # Step 9: build the Docker image
-    - name: Build Docker image
-      run: docker build -t thedoms/oc-lettings:latest .
+    # Step 9: setup Docker Buildx for multi-platform builds
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
 
-    # Step 10: push the Docker image to Docker Hub
-    - name: Push Docker image
-      run: docker push thedoms/oc-lettings:latest
+    # Step 10: build and push the Docker image for the VPS architecture
+    - name: Build and push Docker image
+      if: github.event_name == 'push'
+      uses: docker/build-push-action@v6
+      with:
+        context: .
+        push: true
+        tags: thedoms/oc-lettings:latest
+        platforms: linux/amd64
+
+  deploy:
+
+    # Run deployment only after tests job succeeds
+    needs: tests
+
+    # Run deployment only on pushes to main
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    # Virtual machine used by GitHub Actions
+    runs-on: ubuntu-latest
+
+    steps:
+
+    # Step 1: connect to the VPS and deploy the latest Docker image
+    - name: Deploy to VPS via SSH
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.VPS_HOST }}
+        username: ${{ secrets.VPS_USER }}
+        key: ${{ secrets.VPS_SSH_KEY }}
+        script: |
+          docker pull thedoms/oc-lettings:latest
+          docker rm -f oc-lettings || true
+          docker run -d -p 8000:8000 --name oc-lettings --env-file .env thedoms/oc-lettings:latest
