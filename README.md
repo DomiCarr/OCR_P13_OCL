@@ -2,6 +2,12 @@
 
 Site web d'Orange County Lettings
 
+## Documentation
+
+La documentation complète du projet est disponible sur ReadTheDocs :
+
+https://ocr-p13-ocl.readthedocs.io
+
 ## Développement local
 
 ### Prérequis
