@@ -73,5 +73,37 @@ Dans le reste de la documentation sur le développement local, il est supposé q
 
 Utilisation de PowerShell, comme ci-dessus sauf :
 
-- Pour activer l'environnement virtuel, `.\venv\Scripts\Activate.ps1` 
+- Pour activer l'environnement virtuel, `.\venv\Scripts\Activate.ps1`
 - Remplacer `which <my-command>` par `(Get-Command <my-command>).Path`
+
+
+## CI/CD Pipeline
+
+Le projet utilise **GitHub Actions** pour automatiser la validation, la construction et le déploiement de l'application.
+
+Le pipeline se déclenche automatiquement à chaque `push` sur la branche `main`.
+
+Étapes du pipeline :
+
+1. Vérification de la qualité du code
+   - flake8
+   - pydocstyle
+
+2. Exécution des tests
+   - pytest
+   - mesure de la couverture de tests
+
+3. Construction de l'image Docker
+
+4. Publication de l'image sur Docker Hub
+
+5. Déploiement automatique sur le VPS OVH via SSH
+
+Le déploiement redémarre automatiquement le conteneur Docker avec la dernière image publiée.
+
+## Déploiement
+
+L'application est déployée automatiquement sur un **VPS OVH** via le pipeline CI/CD.
+
+URL publique :
+
