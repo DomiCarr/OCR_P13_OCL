@@ -102,5 +102,8 @@ jobs:
         script: |
           docker pull thedoms/oc-lettings:latest
           docker rm -f oc-lettings || true
-          docker run -d -p 8000:8000 --name oc-lettings --env-file .env thedoms/oc-lettings:latest
+          docker run -d -p 8000:8000 --name oc-lettings \
+            --env-file .env \
+            -v /home/ubuntu/oc-lettings-site.sqlite3:/app/oc-lettings-site.sqlite3 \
+            thedoms/oc-lettings:latest
           docker exec oc-lettings python manage.py migrate
